@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Threading.Tasks;
-using Telegram.Bot;
+using TelegramFeedbackBot.Web.Dtos;
 
 namespace TelegramFeedbackBot.Web.Controllers
 {
@@ -29,15 +28,10 @@ namespace TelegramFeedbackBot.Web.Controllers
 
         [HttpPost]
         [Route("Post")]
-        public async Task<IActionResult> Post([FromBody] PostNotificaiton resource)
+        public async Task<IActionResult> Post([FromBody] PostNotificaitonDto resource)
         {   
             await _notificationDirector.RedirectNotificationToOwner(new IssueNotificaitonDto { Resource = resource.resource ?? "Got it", Timestamp = DateTime.Now });
             return Ok();
-        }
-
-        public class PostNotificaiton
-        {
-            public string resource { get; set; }
         }
     }
 }
