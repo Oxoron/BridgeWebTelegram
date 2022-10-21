@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Sample : how to notify resource owner
+		</title>
+		
+		<script type="text/javascript">
+			var notificationCollectorUrl = 'https://localhost:44389/notification/post'; 
+			
+			function notify()
+			{
+				var currentUrl = window.location.href;
+				
+				
+				let xhr = new XMLHttpRequest();
+				xhr.open("POST", notificationCollectorUrl);
+
+				xhr.setRequestHeader("Accept", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
+
+				xhr.onload = () => console.log(xhr.responseText);
+
+				let data = JSON.stringify({
+				  "resource": currentUrl				  
+				});
+
+				xhr.send(data);
+			}
+		</script>
+	</head>
+	
+	<body>
+		<button id='notifyButton'
+			onclick="notify()">
+			Next
+		</button>
+	</body>
+</html>
