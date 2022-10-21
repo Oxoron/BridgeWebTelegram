@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LtMaterialsBot.Core.Domain
+namespace BridgeWebTelegram.Core.Domain
 {
     /// <summary>
     /// Class represent info about a single notification has been sent by _client_.     
@@ -28,7 +28,7 @@ namespace LtMaterialsBot.Core.Domain
         /// <summary>
         /// A timestamp on the client side. Bot can get the message later.
         /// </summary>
-        public DateTime Timestamp {get;set;}
+        public DateTime Timestamp { get; set; }
     }
 
 

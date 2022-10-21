@@ -1,4 +1,4 @@
-﻿namespace TelegramFeedbackBot.Web.Dtos
+﻿namespace BridgeWebTelegram.Web.Dtos
 {
 
     /// <summary>
@@ -14,5 +14,5 @@
         ///     https://youtsite/page/17
         /// </summary>
         public string resource { get; set; }
-    }    
+    }
 }

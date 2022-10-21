@@ -1,19 +1,12 @@
-using LtMaterialsBot.Core.Domain;
+using BridgeWebTelegram.Core.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Telegram.Bot;
 
-namespace TelegramFeedbackBot.Web
+namespace BridgeWebTelegram.Web
 {
     public class Startup
     {
@@ -33,10 +26,12 @@ namespace TelegramFeedbackBot.Web
             var ownerTelegramId = cfg.GetValue<long>("OwnerTelegramId");
             var telegramBotToken = cfg.GetValue<string>("botToken");
 
+            services.AddCors();
             services.AddControllers();
 
             var botClient = new TelegramBotClient(telegramBotToken);
-            services.AddSingleton<NotificationDirector>(new NotificationDirector(ownerTelegramId, botClient));
+            services.AddSingleton(new NotificationDirector(ownerTelegramId, botClient));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +41,13 @@ namespace TelegramFeedbackBot.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(
+                options => options
+                    .WithHeaders("Content-Type")
+                    .WithMethods("GET","POST")
+                    .AllowAnyOrigin() // TODO read allowed origins from config file on non-Dev environments 
+            );
 
             app.UseHttpsRedirection();
 

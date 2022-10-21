@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Telegram.Bot;
 
-namespace LtMaterialsBot.Core.Domain
+namespace BridgeWebTelegram.Core.Domain
 {
     /// <summary>
     /// Gets the notification from the client - and sends it to Telegram
