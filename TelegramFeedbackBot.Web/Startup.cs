@@ -46,7 +46,7 @@ namespace BridgeWebTelegram.Web
                 options => options
                     .WithHeaders("Content-Type")
                     .WithMethods("GET","POST")
-                    .AllowAnyOrigin() // TODO read allowed origins from config file on non-Dev environments 
+                    .WithOrigins("null")// TODO read allowed origins from config file on non-Dev environments                                         
             );
 
             app.UseHttpsRedirection();
