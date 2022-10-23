@@ -30,6 +30,4 @@ namespace BridgeWebTelegram.Core.Domain
         /// </summary>
         public DateTime Timestamp { get; set; }
     }
-
-
 }

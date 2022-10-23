@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using Telegram.Bot;
 
 namespace BridgeWebTelegram.Web
 {
     public class Startup
     {
+        private const string corsAllowTestingFromFileOrigin = "null";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -17,18 +20,26 @@ namespace BridgeWebTelegram.Web
 
         public IConfiguration Configuration { get; }
 
+        // Return a config from the appsetting.{environment}.json        
+        private IConfiguration StartupConfiguration(string environmentName = null)
+        {
+            var environment = environmentName ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            IConfiguration result = new ConfigurationBuilder()
+               .AddJsonFile($"appsettings.{environment}.json", true, true)
+               .Build();
+            return result;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            IConfiguration cfg = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.Prod.json", true, true)
-               .Build();
-            var ownerTelegramId = cfg.GetValue<long>("OwnerTelegramId");
-            var telegramBotToken = cfg.GetValue<string>("botToken");
-
+            
             services.AddCors();
             services.AddControllers();
 
+            IConfiguration cfg = StartupConfiguration("Production");
+            var ownerTelegramId = cfg.GetValue<long>("OwnerTelegramId");
+            var telegramBotToken = cfg.GetValue<string>("botToken");
             var botClient = new TelegramBotClient(telegramBotToken);
             services.AddSingleton(new NotificationDirector(ownerTelegramId, botClient));
             
@@ -36,17 +47,22 @@ namespace BridgeWebTelegram.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        {   
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+ 
+            string[] allowedOrigins = StartupConfiguration(env.EnvironmentName)
+                ?.GetValue<string>("allowedOrigins")
+                ?.Split(";") ?? new string[] { corsAllowTestingFromFileOrigin };
+            
 
             app.UseCors(
                 options => options
-                    .WithHeaders("Content-Type")
+                    .WithHeaders("Content-Type", "Accept", "Referer")
                     .WithMethods("GET","POST")
-                    .WithOrigins("null")// TODO read allowed origins from config file on non-Dev environments                                         
+                    .WithOrigins(allowedOrigins)// TODO read allowed origins from config file on non-Dev environments                                         
             );
 
             app.UseHttpsRedirection();

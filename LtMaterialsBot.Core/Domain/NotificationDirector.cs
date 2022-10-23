@@ -20,7 +20,7 @@ namespace BridgeWebTelegram.Core.Domain
         public async Task RedirectNotificationToOwner(IssueNotificaitonDto notification)
         {
             // TODO replace by IMessageFormatter
-            string messageToOwner = $"An issue noticed at the {notification.Resource} at {notification.Timestamp}.";
+            string messageToOwner = $"An issue noticed at the {notification.Resource} at {notification.Timestamp} at environment {notification.AdditionalParam1}.";
             await _botClient.SendTextMessageAsync(
                 chatId: _ownerId,
                 text: messageToOwner);
