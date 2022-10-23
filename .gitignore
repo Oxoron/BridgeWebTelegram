@@ -289,3 +289,4 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 /TelegramFeedbackBot.Web/appsettings.Prod.json
+/TelegramFeedbackBot.Web/appsettings.Production.json
