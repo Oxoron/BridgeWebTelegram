@@ -1,8 +1,6 @@
 ﻿using BridgeWebTelegram.Core.Domain;
 using BridgeWebTelegram.Web.Dtos;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -31,11 +29,11 @@ namespace BridgeWebTelegram.Web.Controllers
         [HttpPost]
         [Route("Post")]
         public async Task<IActionResult> Post([FromBody] PostNotificaitonDto resource)
-        {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        {   
             var notificationToPass = new IssueNotificaitonDto { 
                 Resource = resource.resource ?? "Unknown resource", 
-                AdditionalParam1 = environment ?? "Unknown",
+                AdditionalParam1 = resource?.param1,
+                AdditionalParam2 = resource?.param2,
                 Timestamp = DateTime.Now };
             await _notificationDirector.RedirectNotificationToOwner(notificationToPass);
             return Ok();
