@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BridgeWebTelegram.Web.Controllers
 {
     [ApiController]
-    [Route("Notification")]
+    [Route("notification")]
     public class NotificationController : ControllerBase
     {
         private readonly ILogger<NotificationController> _logger;
@@ -27,14 +27,15 @@ namespace BridgeWebTelegram.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Post")]
-        public async Task<IActionResult> Post([FromBody] PostNotificaitonDto resource)
-        {   
+        [Route("post")]
+        public async Task<IActionResult> Post([FromBody()] PostNotificaitonDto resource)
+        {
             var notificationToPass = new IssueNotificaitonDto { 
                 Resource = resource.resource ?? "Unknown resource", 
                 AdditionalParam1 = resource?.param1,
                 AdditionalParam2 = resource?.param2,
                 Timestamp = DateTime.Now };
+            
             await _notificationDirector.RedirectNotificationToOwner(notificationToPass);
             return Ok();
         }

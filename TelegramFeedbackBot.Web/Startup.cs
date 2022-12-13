@@ -52,7 +52,43 @@ namespace BridgeWebTelegram.Web
             {
                 app.UseDeveloperExceptionPage();
             }
- 
+
+            ////Log every request(for debug purposes)
+            //app.Use(async (context, next) =>
+            //{
+            //    string logFileName = "log.log";
+            //    if (!File.Exists(logFileName))
+            //    {
+            //        File.WriteAllText(logFileName, string.Empty);
+            //        Thread.Sleep(100);
+            //    };
+
+            //    var request = context.Request;
+            //    using (var bodyReader = new StreamReader(context.Request.Body))
+            //    {
+
+            //        string host = request.Host.ToString();
+            //        string path = request.Path;                   
+            //        string localIp = request.HttpContext.Connection.LocalIpAddress.ToString();
+            //        string remoteIp = request.HttpContext.Connection.RemoteIpAddress.ToString();
+
+            //        string messageToLog = $"{host}, {path}, {localIp}, {remoteIp}";
+            //        Console.WriteLine(messageToLog);
+
+            //        try
+            //        {
+            //            File.AppendAllText(logFileName, messageToLog + Environment.NewLine);
+            //            await next.Invoke();
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Console.WriteLine(ex.ToString());
+            //            // suppress logging exception
+            //        }
+            //    }
+            //});
+
+            // Setup cors
             string[] allowedOrigins = StartupConfiguration(env.EnvironmentName)
                 ?.GetValue<string>("allowedOrigins")
                 ?.Split(";") ?? new string[] { corsAllowTestingFromFileOrigin };
